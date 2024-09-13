@@ -33,7 +33,9 @@ This project contains a lexer, parser, and interpreter for a simple language cal
 
 > This project uses `ts-node`, so you won't need to compile anything to run your scripts.
 
-Place any program that you want to test in the `scripts` folder. Then, run `npm run start -- [rel-filepath]` which will execute the file **relative to the `scripts` folder**. You can also use `npm run watch -- [rel-filepath]` to enable hot-reloading.
+Place any personal program that you want to execute in the `scripts` folder. Then, run `npm run start -- [rel-filepath]` which will execute the file **relative to the `scripts` folder**. You can also use `npm run watch -- [rel-filepath]` to enable hot-reloading.
+
+> The files in the `scripts` directory won't get commited.
 
 ### Runing test
 
