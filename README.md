@@ -9,7 +9,7 @@ This project contains a lexer, parser, and interpreter for a simple language cal
 - [Table of Contents](#table-of-contents)
 - [Installation \& Setup](#installation--setup)
   - [Cloning the repository](#cloning-the-repository)
-  - [Launching scripts](#launching-scripts)
+  - [Executing scripts](#executing-scripts)
   - [Runing test](#runing-test)
 - [Grammar](#grammar)
   - [Terminals](#terminals)
@@ -29,7 +29,7 @@ This project contains a lexer, parser, and interpreter for a simple language cal
 1.  Clone this repository by running `git clone https://github.com/Thibault-Monnier/tini-lang.git` in your command terminal.
 2.  Navigate to the created directory, then run `npm install` to install all the necessary packages.
 
-### Launching scripts
+### Executing scripts
 
 > This project uses `ts-node`, so you won't need to compile anything to run your scripts.
 
