@@ -1,5 +1,5 @@
 {
-    "name": "Tini-lang",
+    "name": "tini-lang",
     "main": "lib/index.js",
     "bin": {
         "tini-lang": "lib/index.js"
