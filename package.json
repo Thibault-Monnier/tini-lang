@@ -8,7 +8,7 @@
         "start": "ts-node src/index.ts",
         "build": "tsc",
         "test": "jest",
-        "watch": "ts-node --files src/index.ts"
+        "watch": "nodemon --watch src --exec ts-node src/index.ts"
     },
     "author": "Thibault Monnier",
     "license": "MIT",
@@ -16,6 +16,7 @@
         "@types/jest": "^29.5.12",
         "@types/node": "^22.5.4",
         "jest": "^29.7.0",
+        "nodemon": "^3.1.4",
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
         "typescript": "^5.5.4"
