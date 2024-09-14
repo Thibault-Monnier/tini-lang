@@ -111,8 +111,18 @@ const testCases: TestCase[] = [
         input: `
       print unknownVar
     `,
-        expectedAST: null, // Parsing should succeed; error would occur during interpretation
-        expectedError: undefined,
+        expectedAST: {
+            type: 'Program',
+            statements: [
+                {
+                    type: 'Print',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'unknownVar',
+                    },
+                },
+            ],
+        },
     },
     {
         description: 'Syntax error due to missing operator',
