@@ -1,15 +1,11 @@
 export class Lexer {
     private words: string[]
     private pointerPosition: number = 0
-    private length: number
 
     constructor(input: string) {
         this.words = input.match(/[^\s\n]+|\n/g) || [] // Find all words and newlines
-        this.length = input.length
-        console.warn('Word:', this.words)
     }
 
-    // Get the next token
     public getNextToken(): Token {
         let token: Token
         try {
@@ -23,8 +19,6 @@ export class Lexer {
     }
 
     private parseToken(word: string): Token {
-        // TODO: Implement tokenization logic
-
         switch (word) {
             case undefined:
                 return { type: TokenType.EOF, value: '' }
