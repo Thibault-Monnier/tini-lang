@@ -15,7 +15,7 @@ export class Lexer {
         try {
             token = this.parseToken(this.words[this.pointerPosition])
         } catch (error) {
-            throw new Error('Problem parsing token')
+            throw new Error(String(error) || 'Error while parsing token')
         }
 
         this.pointerPosition += 1
