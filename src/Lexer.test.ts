@@ -85,6 +85,10 @@ describe('Lexer Tests', () => {
                 do {
                     token = lexer.getNextToken()
                     tokens.push(token)
+
+                    if (tokens.length > 1000) {
+                        throw new Error('Infinite loop while tokenizing')
+                    }
                 } while (token.type !== TokenType.EOF && token.type !== TokenType.NEWLINE)
 
                 if (expectedError) {
