@@ -9,7 +9,6 @@ export class Parser {
         this.currentToken = this.lexer.getNextToken()
     }
 
-    // Eat the current token if it matches the expected type
     private eat(tokenType: TokenType): void {
         if (this.currentToken.type === tokenType) {
             this.currentToken = this.lexer.getNextToken()
@@ -20,15 +19,12 @@ export class Parser {
         }
     }
 
-    // Parse the entire program
     public parseProgram(): ProgramNode {
         const statements = this.parseStatements()
         return { type: 'Program', statements }
     }
 
-    // Parse multiple statements
     private parseStatements(): StatementNode[] {
-        // TODO: Implement statements parsing
         const statements: StatementNode[] = []
 
         while (this.currentToken.type !== TokenType.EOF) {
@@ -43,10 +39,7 @@ export class Parser {
         return statements
     }
 
-    // Parse a single statement
     private parseStatement(): StatementNode {
-        // TODO: Implement statement parsing
-
         switch (this.currentToken.type) {
             case TokenType.IDENTIFIER:
                 return this.parseAssignment()
@@ -57,9 +50,7 @@ export class Parser {
         }
     }
 
-    // Parse an assignment statement
     private parseAssignment(): AssignmentNode {
-        // TODO: Implement assignment parsing
         const identifier = this.currentToken.value
         this.eat(TokenType.IDENTIFIER)
         this.eat(TokenType.ASSIGN)
@@ -67,17 +58,13 @@ export class Parser {
         return { type: 'Assignment', identifier, expression }
     }
 
-    // Parse a print statement
     private parsePrint(): PrintNode {
-        // TODO: Implement print parsing
         this.eat(TokenType.PRINT)
         const expression = this.parseExpression()
         return { type: 'Print', expression }
     }
 
-    // Parse an expression
     private parseExpression(): ExpressionNode {
-        // TODO: Implement expression parsing
         let node = this.parseTerm()
 
         while (
@@ -93,7 +80,6 @@ export class Parser {
         return node
     }
 
-    // Parse a term
     private parseTerm(): ExpressionNode {
         const currentToken = this.currentToken
 
