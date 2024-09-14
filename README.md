@@ -1,5 +1,7 @@
 # Tini-lang programming language
 
+[![CI](https://github.com/Thibault-Monnier/tini-lang/actions/workflows/ci.yml/badge.svg)](https://github.com/Thibault-Monnier/tini-lang/actions/workflows/ci.yml)
+
 This project contains a lexer, parser, and interpreter for a simple language called `tini-lang`, and is coded in `Typescript`. My objective is to learn how to create a programming language, all by eventually making it Turing-complete.
 
 ## Table of Contents
