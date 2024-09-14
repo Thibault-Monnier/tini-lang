@@ -89,7 +89,7 @@ describe('Lexer Tests', () => {
                     if (tokens.length > 1000) {
                         throw new Error('Infinite loop while tokenizing')
                     }
-                } while (token.type !== TokenType.EOF && token.type !== TokenType.NEWLINE)
+                } while (token.type !== TokenType.EOF)
 
                 if (expectedError) {
                     fail('Expected an error but tokenization succeeded.')
