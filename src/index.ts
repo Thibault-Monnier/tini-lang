@@ -4,6 +4,8 @@ import { Parser } from './Parser'
 import { Lexer } from './Lexer'
 import util from 'util'
 import chalk from 'chalk'
+import { Interpreter } from './Interpreter'
+import { printSeparator } from './printUtils'
 
 const filePath = process.argv[2]
 
@@ -22,7 +24,7 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
 
     console.warn('Program content:\n')
     console.log(data)
-    console.log('\n--------------------------------------------------------\n')
+    printSeparator()
 
     const ast = new Parser(new Lexer(data)).parseProgram()
     console.log(
@@ -35,4 +37,6 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
             }),
         ),
     )
+
+    const output = new Interpreter(ast).interpret()
 })

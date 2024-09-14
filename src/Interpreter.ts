@@ -1,9 +1,10 @@
-import { Lexer } from './Lexer'
-import { ProgramNode, StatementNode, ExpressionNode, Parser } from './Parser'
+import { Lexer, TokenType } from './Lexer'
+import { ProgramNode, StatementNode, ExpressionNode, Parser, NumberNode } from './Parser'
+import { printSeparator } from './printUtils'
 
 export class Interpreter {
     private ast: ProgramNode
-    private globals: { [key: string]: number } = {}
+    private variables: { [key: string]: number } = {}
 
     constructor(ast: ProgramNode) {
         this.ast = ast
@@ -11,18 +12,58 @@ export class Interpreter {
 
     public interpret(): void {
         // TODO: Implement interpretation logic
+        try {
+            for (const statement of this.ast.statements) {
+                this.execute(statement)
+            }
+        } catch (error) {
+            printSeparator()
+            console.error((error as Error).message, '\n')
+        }
     }
 
     // Execute a statement
     private execute(node: StatementNode): void {
         // TODO: Implement statement execution
+        if (node.type === 'Assignment') {
+            this.variables[node.identifier] = this.evaluate(node.expression)
+        } else if (node.type === 'Print') {
+            log(this.evaluate(node.expression))
+        }
     }
 
     // Evaluate an expression
     private evaluate(node: ExpressionNode): number {
         // TODO: Implement expression evaluation
-        return 0 // Placeholder return
+        switch (node.type) {
+            case 'BinaryOp':
+                const left = this.evaluate(node.left)
+                const right = this.evaluate(node.right)
+
+                if (node.operator === '+') {
+                    return left + right
+                } else if (node.operator === '-') {
+                    return left - right
+                } else {
+                    throw new Error(`Unknown operator: ${node.operator}`)
+                }
+
+            case 'Identifier':
+                const value = this.variables[node.name]
+                if (value === undefined) {
+                    throw new Error(`Undefined variable: ${node.name}`)
+                }
+
+                return value
+
+            case 'Number':
+                return node.value
+        }
     }
+}
+
+function log(value: number) {
+    console.log(value.toString())
 }
 
 // Example usage
