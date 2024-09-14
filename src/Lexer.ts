@@ -6,6 +6,7 @@ export class Lexer {
     constructor(input: string) {
         this.input = input
         this.length = input.length
+        console.warn('Input:', input.split(' '))
     }
 
     // Get the next token
@@ -17,9 +18,7 @@ export class Lexer {
             throw new Error('Problem parsing token')
         }
 
-        console.warn('Token:', token)
-
-        this.pointerPosition += token.value.length
+        this.pointerPosition += 1
         return token
     }
 
