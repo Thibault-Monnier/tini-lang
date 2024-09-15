@@ -131,7 +131,7 @@ const testCases: TestCase[] = [
       b = a 5
     `,
         expectedAST: null,
-        expectedError: 'Unexpected token', // Adjust based on your error message
+        expectedError: 'Unexpected token',
     },
 ]
 
@@ -145,7 +145,7 @@ describe('Parser Tests', () => {
                 const ast = parser.parseProgram()
 
                 if (expectedError) {
-                    fail('Expected an error but parsing succeeded.')
+                    throw new Error('Expected an error, got none')
                 } else {
                     expect(ast).toEqual(expectedAST)
                 }

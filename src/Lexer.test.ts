@@ -94,7 +94,7 @@ describe('Lexer Tests', () => {
                 } while (token.type !== 'EOF')
 
                 if (expectedError) {
-                    fail('Expected an error but tokenization succeeded.')
+                    throw new Error('Expected an error, got none')
                 } else {
                     expect(tokens).toEqual(expectedTokens)
                 }

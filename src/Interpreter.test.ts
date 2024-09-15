@@ -71,8 +71,9 @@ describe('Interpreter Tests', () => {
 
                 if (expectedOutput !== undefined) {
                     expect(consoleSpy).toHaveBeenCalledWith(expectedOutput)
-                } else if (expectedError) {
-                    fail('Expected an error but none was thrown.')
+                }
+                if (expectedError) {
+                    throw new Error('Expected an error, got none')
                 }
             } catch (error: any) {
                 if (expectedError) {

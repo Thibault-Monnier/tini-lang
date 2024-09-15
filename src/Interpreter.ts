@@ -16,9 +16,9 @@ export class Interpreter {
             for (const statement of this.ast.statements) {
                 this.execute(statement)
             }
-        } catch (error) {
+        } catch (err) {
             printSeparator()
-            console.error((error as Error).message + '\n')
+            throw new Error(err as any)
         }
     }
 
