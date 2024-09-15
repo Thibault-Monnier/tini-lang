@@ -1,4 +1,4 @@
-import { Lexer, Token, TokenType } from './Lexer'
+import { Lexer, Token } from './Lexer'
 
 interface TestCase {
     description: string
@@ -13,56 +13,58 @@ const testCases: TestCase[] = [
         description: 'Simple assignment',
         input: 'a = 1',
         expectedTokens: [
-            { type: TokenType.IDENTIFIER, value: 'a' },
-            { type: TokenType.ASSIGN, value: '=' },
-            { type: TokenType.NUMBER, value: '1' },
-            { type: TokenType.EOF, value: '' },
+            { type: 'IDENTIFIER', value: 'a' },
+            { type: 'ASSIGN' },
+            { type: 'NUMBER', value: '1' },
+            { type: 'EOF' },
         ],
     },
     {
         description: 'Assignment with addition',
         input: 'b = 1 + 2',
         expectedTokens: [
-            { type: TokenType.IDENTIFIER, value: 'b' },
-            { type: TokenType.ASSIGN, value: '=' },
-            { type: TokenType.NUMBER, value: '1' },
-            { type: TokenType.PLUS, value: '+' },
-            { type: TokenType.NUMBER, value: '2' },
-            { type: TokenType.EOF, value: '' },
+            { type: 'IDENTIFIER', value: 'b' },
+            { type: 'ASSIGN' },
+            { type: 'NUMBER', value: '1' },
+            { type: 'OPERATOR', value: '+' },
+            { type: 'NUMBER', value: '2' },
+            { type: 'EOF' },
         ],
     },
     {
         description: 'Print statement',
         input: 'print b + 3',
         expectedTokens: [
-            { type: TokenType.PRINT, value: 'print' },
-            { type: TokenType.IDENTIFIER, value: 'b' },
-            { type: TokenType.PLUS, value: '+' },
-            { type: TokenType.NUMBER, value: '3' },
-            { type: TokenType.EOF, value: '' },
+            { type: 'PRINT' },
+            { type: 'IDENTIFIER', value: 'b' },
+            { type: 'OPERATOR', value: '+' },
+            { type: 'NUMBER', value: '3' },
+            { type: 'EOF' },
         ],
     },
     {
         description: 'Multiple statements with newlines',
         input: `
       a = 1
-      b = a + 2
+      b = a + 2 - 3
       print b
     `,
         expectedTokens: [
-            { type: TokenType.IDENTIFIER, value: 'a' },
-            { type: TokenType.ASSIGN, value: '=' },
-            { type: TokenType.NUMBER, value: '1' },
-            { type: TokenType.NEWLINE, value: '\n' },
-            { type: TokenType.IDENTIFIER, value: 'b' },
-            { type: TokenType.ASSIGN, value: '=' },
-            { type: TokenType.IDENTIFIER, value: 'a' },
-            { type: TokenType.PLUS, value: '+' },
-            { type: TokenType.NUMBER, value: '2' },
-            { type: TokenType.NEWLINE, value: '\n' },
-            { type: TokenType.PRINT, value: 'print' },
-            { type: TokenType.IDENTIFIER, value: 'b' },
-            { type: TokenType.EOF, value: '' },
+            { type: 'IDENTIFIER', value: 'a' },
+            { type: 'ASSIGN' },
+            { type: 'NUMBER', value: '1' },
+            { type: 'NEWLINE' },
+            { type: 'IDENTIFIER', value: 'b' },
+            { type: 'ASSIGN' },
+            { type: 'IDENTIFIER', value: 'a' },
+            { type: 'OPERATOR', value: '+' },
+            { type: 'NUMBER', value: '2' },
+            { type: 'OPERATOR', value: '-' },
+            { type: 'NUMBER', value: '3' },
+            { type: 'NEWLINE' },
+            { type: 'PRINT' },
+            { type: 'IDENTIFIER', value: 'b' },
+            { type: 'EOF' },
         ],
     },
     {
@@ -89,7 +91,7 @@ describe('Lexer Tests', () => {
                     if (tokens.length > 1000) {
                         throw new Error('Infinite loop while tokenizing')
                     }
-                } while (token.type !== TokenType.EOF)
+                } while (token.type !== 'EOF')
 
                 if (expectedError) {
                     fail('Expected an error but tokenization succeeded.')

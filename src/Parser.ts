@@ -1,4 +1,4 @@
-import { Lexer, Token, TokenType } from './Lexer'
+import { Lexer, Operator, Token, TokenType } from './Lexer'
 
 export class Parser {
     private lexer: Lexer
@@ -27,12 +27,12 @@ export class Parser {
     private parseStatements(): StatementNode[] {
         const statements: StatementNode[] = []
 
-        while (this.currentToken.type !== TokenType.EOF) {
+        while (this.currentToken.type !== 'EOF') {
             const statement = this.parseStatement()
             statements.push(statement)
 
-            if (this.currentToken.type === TokenType.NEWLINE) {
-                this.eat(TokenType.NEWLINE)
+            if (this.currentToken.type === 'NEWLINE') {
+                this.eat('NEWLINE')
             }
         }
 
@@ -41,25 +41,24 @@ export class Parser {
 
     private parseStatement(): StatementNode {
         switch (this.currentToken.type) {
-            case TokenType.IDENTIFIER:
-                return this.parseAssignment()
-            case TokenType.PRINT:
+            case 'IDENTIFIER':
+                return this.parseAssignment(this.currentToken.value)
+            case 'PRINT':
                 return this.parsePrint()
             default:
                 throw new Error(`Unexpected token in ${this.currentToken.type}`)
         }
     }
 
-    private parseAssignment(): AssignmentNode {
-        const identifier = this.currentToken.value
-        this.eat(TokenType.IDENTIFIER)
-        this.eat(TokenType.ASSIGN)
+    private parseAssignment(identifier: string): AssignmentNode {
+        this.eat('IDENTIFIER')
+        this.eat('ASSIGN')
         const expression = this.parseExpression()
         return { type: 'Assignment', identifier, expression }
     }
 
     private parsePrint(): PrintNode {
-        this.eat(TokenType.PRINT)
+        this.eat('PRINT')
         const expression = this.parseExpression()
         return { type: 'Print', expression }
     }
@@ -67,10 +66,7 @@ export class Parser {
     private parseExpression(): ExpressionNode {
         let node = this.parseTerm()
 
-        while (
-            this.currentToken.type === TokenType.PLUS ||
-            this.currentToken.type === TokenType.MINUS
-        ) {
+        while (this.currentToken.type === 'OPERATOR') {
             const operator = this.currentToken.value
             this.eat(this.currentToken.type)
             const right = this.parseTerm()
@@ -83,15 +79,15 @@ export class Parser {
     private parseTerm(): ExpressionNode {
         const currentToken = this.currentToken
 
-        switch (this.currentToken.type) {
-            case TokenType.NUMBER:
-                this.eat(TokenType.NUMBER)
+        switch (currentToken.type) {
+            case 'NUMBER':
+                this.eat('NUMBER')
                 return { type: 'Number', value: parseInt(currentToken.value) }
-            case TokenType.IDENTIFIER:
-                this.eat(TokenType.IDENTIFIER)
+            case 'IDENTIFIER':
+                this.eat('IDENTIFIER')
                 return { type: 'Identifier', name: currentToken.value }
             default:
-                throw new Error(`Unexpected token in ${currentToken.type}`)
+                throw new Error(`Unexpected token in term: ${currentToken.type}`)
         }
     }
 }
@@ -122,7 +118,7 @@ export type ExpressionNode = BinaryOpNode | NumberNode | IdentifierNode
 
 export interface BinaryOpNode extends ASTNode {
     type: 'BinaryOp'
-    operator: string
+    operator: Operator
     left: ExpressionNode
     right: ExpressionNode
 }

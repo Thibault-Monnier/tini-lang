@@ -1,4 +1,4 @@
-import { Lexer, TokenType } from './Lexer'
+import { Lexer } from './Lexer'
 import { ProgramNode, StatementNode, ExpressionNode, Parser, NumberNode } from './Parser'
 import { printSeparator } from './printUtils'
 
@@ -18,7 +18,7 @@ export class Interpreter {
             }
         } catch (error) {
             printSeparator()
-            console.error((error as Error).message, '\n')
+            console.error((error as Error).message + '\n')
         }
     }
 

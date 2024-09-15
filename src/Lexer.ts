@@ -21,22 +21,21 @@ export class Lexer {
     private parseToken(word: string): Token {
         switch (word) {
             case undefined:
-                return { type: TokenType.EOF, value: '' }
+                return { type: 'EOF' }
             case 'print':
-                return { type: TokenType.PRINT, value: 'print' }
+                return { type: 'PRINT' }
             case '=':
-                return { type: TokenType.ASSIGN, value: '=' }
+                return { type: 'ASSIGN' }
             case '+':
-                return { type: TokenType.PLUS, value: '+' }
             case '-':
-                return { type: TokenType.MINUS, value: '-' }
+                return { type: 'OPERATOR', value: word }
             case '\n':
-                return { type: TokenType.NEWLINE, value: '\n' }
+                return { type: 'NEWLINE' }
             default:
                 if (/^[a-zA-Z]+$/.test(word)) {
-                    return { type: TokenType.IDENTIFIER, value: word }
+                    return { type: 'IDENTIFIER', value: word }
                 } else if (/^[0-9]+$/.test(word)) {
-                    return { type: TokenType.NUMBER, value: word }
+                    return { type: 'NUMBER', value: word }
                 }
         }
 
@@ -44,18 +43,19 @@ export class Lexer {
     }
 }
 
-export enum TokenType {
-    IDENTIFIER = 'IDENTIFIER',
-    NUMBER = 'NUMBER',
-    PRINT = 'PRINT',
-    ASSIGN = 'ASSIGN',
-    PLUS = 'PLUS',
-    MINUS = 'MINUS',
-    NEWLINE = 'NEWLINE',
-    EOF = 'EOF',
-}
+export type Token =
+    | {
+          type: 'IDENTIFIER' | 'NUMBER'
+          value: string
+      }
+    | {
+          type: 'OPERATOR'
+          value: Operator
+      }
+    | {
+          type: 'ASSIGN' | 'PRINT' | 'NEWLINE' | 'EOF'
+      }
 
-export interface Token {
-    type: TokenType
-    value: string
-}
+export type TokenType = Token['type']
+
+export type Operator = '+' | '-'
