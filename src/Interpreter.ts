@@ -10,15 +10,12 @@ export class Interpreter {
     }
 
     public interpret(): void {
-        // TODO: Implement interpretation logic
         for (const statement of this.ast.statements) {
             this.execute(statement)
         }
     }
 
-    // Execute a statement
     private execute(node: StatementNode): void {
-        // TODO: Implement statement execution
         if (node.type === 'Assignment') {
             this.variables[node.identifier] = this.evaluate(node.expression)
         } else if (node.type === 'Print') {
@@ -26,9 +23,7 @@ export class Interpreter {
         }
     }
 
-    // Evaluate an expression
     private evaluate(node: ExpressionNode): number {
-        // TODO: Implement expression evaluation
         switch (node.type) {
             case 'BinaryOp':
                 const left = this.evaluate(node.left)
@@ -59,24 +54,3 @@ export class Interpreter {
 function log(value: number) {
     console.log(value.toString())
 }
-
-// Example usage
-const inputProgram = `
-  a = 1
-  b = 1 + 2
-  print b + 3
-  `
-
-// Remove leading/trailing whitespace
-const trimmedInput = inputProgram.trim()
-
-// Initialize lexer and parser
-const lexer = new Lexer(trimmedInput)
-const parser = new Parser(lexer)
-
-// Parse the program
-const ast = parser.parseProgram()
-
-// Interpret the program
-const interpreter = new Interpreter(ast)
-interpreter.interpret()
