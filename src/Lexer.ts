@@ -8,11 +8,7 @@ export class Lexer {
 
     public getNextToken(): Token {
         let token: Token
-        try {
-            token = this.parseToken(this.words[this.pointerPosition])
-        } catch (error) {
-            throw new Error(String(error) || 'Error while parsing token')
-        }
+        token = this.parseToken(this.words[this.pointerPosition])
 
         this.pointerPosition += 1
         return token

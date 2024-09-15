@@ -26,17 +26,23 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
     console.log(data)
     printSeparator()
 
-    const ast = new Parser(new Lexer(data)).parseProgram()
-    console.log(
-        chalk.blueBright.bold(
-            'AST:',
-            util.inspect(ast, {
-                showHidden: false,
-                depth: null,
-                colors: true,
-            }),
-        ),
-    )
+    try {
+        const ast = new Parser(new Lexer(data)).parseProgram()
+        console.log(
+            chalk.blueBright.bold(
+                'AST:',
+                util.inspect(ast, {
+                    showHidden: false,
+                    depth: null,
+                    colors: true,
+                }),
+            ),
+        )
 
-    const output = new Interpreter(ast).interpret()
+        const output = new Interpreter(ast).interpret()
+    } catch (e) {
+        printSeparator()
+        console.error((e as Error).message)
+        process.exit(1)
+    }
 })

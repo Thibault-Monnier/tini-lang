@@ -1,6 +1,5 @@
 import { Lexer } from './Lexer'
 import { ProgramNode, StatementNode, ExpressionNode, Parser, NumberNode } from './Parser'
-import { printSeparator } from './printUtils'
 
 export class Interpreter {
     private ast: ProgramNode
@@ -12,13 +11,8 @@ export class Interpreter {
 
     public interpret(): void {
         // TODO: Implement interpretation logic
-        try {
-            for (const statement of this.ast.statements) {
-                this.execute(statement)
-            }
-        } catch (err) {
-            printSeparator()
-            throw new Error(err as any)
+        for (const statement of this.ast.statements) {
+            this.execute(statement)
         }
     }
 
