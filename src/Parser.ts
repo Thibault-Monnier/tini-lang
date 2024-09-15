@@ -28,12 +28,13 @@ export class Parser {
         const statements: StatementNode[] = []
 
         while (this.currentToken.type !== 'EOF') {
-            const statement = this.parseStatement()
-            statements.push(statement)
-
             if (this.currentToken.type === 'NEWLINE') {
                 this.eat('NEWLINE')
+                continue
             }
+
+            const statement = this.parseStatement()
+            statements.push(statement)
         }
 
         return statements
@@ -46,7 +47,7 @@ export class Parser {
             case 'PRINT':
                 return this.parsePrint()
             default:
-                throw new Error(`Unexpected token in ${this.currentToken.type}`)
+                throw new Error(`Unexpected token in statement: found ${this.currentToken.type}`)
         }
     }
 
