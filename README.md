@@ -80,8 +80,9 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 2. **Statements**
 
     ```
-    Statements → Statement
-               | Statements NEWLINE Statement
+    Statements → Statement Statements
+               | NEWLINES Statements
+               | ε
     ```
 
 3. **Statement**
