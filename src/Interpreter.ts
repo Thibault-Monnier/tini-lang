@@ -1,5 +1,4 @@
-import { Lexer } from './Lexer'
-import { ProgramNode, StatementNode, ExpressionNode, Parser, NumberNode } from './Parser'
+import { ProgramNode, StatementNode, ExpressionNode } from './Parser'
 
 export class Interpreter {
     private ast: ProgramNode

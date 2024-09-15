@@ -37,11 +37,11 @@ This project contains a lexer, parser, and interpreter for a simple language cal
 
 Place any personal program that you want to execute in the `scripts` folder. Then, run `npm run start -- [rel-filepath]` which will execute the file **relative to the `scripts` folder**. You can also use `npm run watch -- [rel-filepath]` to enable hot-reloading.
 
-> The files in the `scripts` directory won't get commited.
+> Note that the `scripts` folder is ignored by Git.
 
 ### Runing test
 
-You can run tests with `npm run test`
+You can run all tests with `npm run test`, or a specific file with `npm run test -- [filepath]`
 
 ---
 
@@ -55,8 +55,7 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 -   `NUMBER` → Numeric literals (e.g., `1`, `2`)
 -   `PRINT` → The keyword `print`
 -   `ASSIGN` → The assignment operator `=`
--   `PLUS` → The addition operator `+`
--   `MINUS` → The subtraction operator `-`
+-   `OPERATOR` → The addition and substraction operators `+` / `-`
 -   `NEWLINE` → Line separator
 -   `EOF` → End of file/input
 
@@ -107,8 +106,7 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 6. **Expression**
 
     ```
-    Expression → Expression PLUS Term
-               | Expression MINUS Term
+    Expression → Expression OPERATOR Term
                | Term
     ```
 
@@ -121,8 +119,8 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 
 ### Operator Precedence and Associativity
 
--   Operators `PLUS` (`+`) and `MINUS` (`-`) are **left-associative**.
--   `PLUS` and `MINUS` have the same precedence level.
+-   Operators `+` and `-` are **left-associative**.
+-   `+` and `-` have the same precedence level.
 
 ---
 
