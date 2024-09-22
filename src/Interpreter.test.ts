@@ -1,6 +1,6 @@
 import { Interpreter } from './Interpreter'
 import { Lexer } from './Lexer'
-import { Parser } from './Parser'
+import { Parser } from './Parser/main'
 
 interface TestCase {
     description: string

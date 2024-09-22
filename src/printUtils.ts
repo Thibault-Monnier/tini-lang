@@ -1,3 +1,3 @@
-export function printSeparator() {
-    console.log('\n--------------------------------------------------------\n')
+export function printSeparator(info = '') {
+    console.log('\n-------------------------------------------------------- ' + info)
 }

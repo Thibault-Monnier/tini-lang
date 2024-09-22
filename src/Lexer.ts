@@ -1,6 +1,7 @@
 export class Lexer {
     private words: string[]
-    private pointerPosition: number = 0
+    private tokenNb = 0
+    private lineNb = 0
 
     constructor(input: string) {
         this.words = input.match(/[^\s\n]+|\n/g) || [] // Find all words and newlines
@@ -8,13 +9,13 @@ export class Lexer {
 
     public getNextToken(): Token {
         let token: Token
-        token = this.parseToken(this.words[this.pointerPosition])
+        token = { ...this.parseToken(this.words[this.tokenNb]), lineNb: this.lineNb }
 
-        this.pointerPosition += 1
+        this.tokenNb += 1
         return token
     }
 
-    private parseToken(word: string): Token {
+    private parseToken(word: string): BareToken {
         switch (word) {
             case undefined:
                 return { type: 'EOF' }
@@ -26,6 +27,7 @@ export class Lexer {
             case '-':
                 return { type: 'OPERATOR', value: word }
             case '\n':
+                this.lineNb++
                 return { type: 'NEWLINE' }
             default:
                 if (/^[a-zA-Z]+$/.test(word)) {
@@ -39,7 +41,7 @@ export class Lexer {
     }
 }
 
-export type Token =
+type BareToken =
     | {
           type: 'IDENTIFIER' | 'NUMBER'
           value: string
@@ -51,6 +53,8 @@ export type Token =
     | {
           type: 'ASSIGN' | 'PRINT' | 'NEWLINE' | 'EOF'
       }
+
+export type Token = BareToken & { lineNb: number }
 
 export type TokenType = Token['type']
 

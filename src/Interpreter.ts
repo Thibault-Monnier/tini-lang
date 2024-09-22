@@ -1,4 +1,5 @@
-import { ProgramNode, StatementNode, ExpressionNode } from './Parser'
+import { ProgramNode, StatementNode, ExpressionNode } from './Parser/main'
+import { printSeparator } from './printUtils'
 
 export class Interpreter {
     private ast: ProgramNode
@@ -9,6 +10,7 @@ export class Interpreter {
     }
 
     public interpret(): void {
+        printSeparator("Program output")
         for (const statement of this.ast.statements) {
             this.execute(statement)
         }

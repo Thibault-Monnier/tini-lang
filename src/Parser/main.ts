@@ -1,4 +1,4 @@
-import { Lexer, Operator, Token, TokenType } from './Lexer'
+import { Lexer, Operator, Token, TokenType } from '../Lexer'
 
 export class Parser {
     private lexer: Lexer
@@ -14,7 +14,8 @@ export class Parser {
             this.currentToken = this.lexer.getNextToken()
         } else {
             throw new Error(
-                `Unexpected token type: expected ${tokenType}, got ${this.currentToken.type}`,
+                this.errorContext(this.currentToken) +
+                    `Unexpected token type: expected ${tokenType}, got ${this.currentToken.type}`,
             )
         }
     }
@@ -47,7 +48,7 @@ export class Parser {
             case 'PRINT':
                 return this.parsePrint()
             default:
-                throw new Error(`Unexpected token in statement: found ${this.currentToken.type}`)
+                this.handleError(this.currentToken, 'statement')
         }
     }
 
@@ -88,8 +89,19 @@ export class Parser {
                 this.eat('IDENTIFIER')
                 return { type: 'Identifier', name: currentToken.value }
             default:
-                throw new Error(`Unexpected token in term: ${currentToken.type}`)
+                this.handleError(currentToken, 'term')
         }
+    }
+
+    private handleError(token: Token, location: string): never {
+        const context = this.errorContext(token)
+        throw new Error(
+            context + `Unexpected token in ${location}: found ${this.currentToken.type}`,
+        )
+    }
+
+    private errorContext(token: Token): string {
+        return `At line ${token.lineNb}:\n`
     }
 }
 

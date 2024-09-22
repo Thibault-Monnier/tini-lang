@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { Parser } from './Parser'
+import { Parser } from './Parser/main'
 import { Lexer } from './Lexer'
 import util from 'util'
 import chalk from 'chalk'
@@ -18,7 +18,7 @@ const fullPath = path.join('scripts', filePath)
 
 fs.readFile(fullPath, 'utf8', (err, data) => {
     if (err) {
-        console.error(`Error reading the file: ${err.message}`)
+        console.error(`Error reading the file -> ${err.message}`)
         process.exit(1)
     }
 
@@ -41,7 +41,6 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
 
         const output = new Interpreter(ast).interpret()
     } catch (e) {
-        printSeparator()
         console.error((e as Error).message)
         process.exit(1)
     }

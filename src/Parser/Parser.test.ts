@@ -1,5 +1,5 @@
-import { Lexer } from './Lexer'
-import { Parser, ProgramNode } from './Parser'
+import { Lexer } from '../Lexer'
+import { Parser, ProgramNode } from './main'
 
 interface TestCase {
     description: string
