@@ -130,13 +130,13 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 Here is an example program written in the simple programming language:
 
 ```
-a = 1
-b = 1 + 2
+a = 0 - 1
+b = 1 + 2 - a
 print b + 3
 ```
 
 **Expected Output:**
 
 ```
-6
+7
 ```
