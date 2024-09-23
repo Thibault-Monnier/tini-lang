@@ -101,10 +101,11 @@ const testCases: TestCase[] = [
             { type: 'NEWLINE', lineNb: 3 },
 
             { type: 'NEWLINE', lineNb: 4 },
+            { type: 'NEWLINE', lineNb: 5 },
 
-            { type: 'PRINT', lineNb: 5 },
-            { type: 'IDENTIFIER', value: 'b', lineNb: 5 },
-            { type: 'EOF', lineNb: 5 },
+            { type: 'PRINT', lineNb: 6 },
+            { type: 'IDENTIFIER', value: 'b', lineNb: 6 },
+            { type: 'EOF', lineNb: 6 },
         ],
     },
     {

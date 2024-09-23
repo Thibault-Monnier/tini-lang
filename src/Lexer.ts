@@ -93,7 +93,7 @@ export class Lexer {
     }
 
     private isOperator(char: string): boolean {
-        return char === '+' || char === '-'
+        return Operators.has(char as Operator)
     }
 
     private extractOperator(): BareToken {
@@ -125,4 +125,6 @@ export type Token = BareToken & { lineNb: number }
 
 export type TokenType = Token['type']
 
-export type Operator = '+' | '-' | '*' | '/'
+const Operators = new Set(['+', '-', '*', '/'] as const)
+
+export type Operator = typeof Operators extends Set<infer T> ? T : never
