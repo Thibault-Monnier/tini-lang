@@ -10,7 +10,7 @@ export class Interpreter {
     }
 
     public interpret(): void {
-        printSeparator("Program output")
+        printSeparator('Program output')
         for (const statement of this.ast.statements) {
             this.execute(statement)
         }
@@ -27,7 +27,7 @@ export class Interpreter {
     private evaluate(node: ExpressionNode): number {
         switch (node.type) {
             case 'BinaryOp':
-                const left = this.evaluate(node.left)
+                const left = node.left ? this.evaluate(node.left) : 0
                 const right = this.evaluate(node.right)
 
                 if (node.operator === '+') {

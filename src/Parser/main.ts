@@ -65,17 +65,24 @@ export class Parser {
         return { type: 'Print', expression }
     }
 
-    private parseExpression(): ExpressionNode {
-        let node = this.parseTerm()
+    private parseExpression(): ExpressionNode | never {
+        let node: ExpressionNode | null = null
+        if (this.currentToken.type !== 'OPERATOR') {
+            node = this.parseTerm()
+        }
 
         while (this.currentToken.type === 'OPERATOR') {
             const operator = this.currentToken.value
             this.eat(this.currentToken.type)
             const right = this.parseTerm()
-            node = { type: 'BinaryOp', operator, left: node, right }
+            node = { type: 'BinaryOp', operator, left: node ? node : undefined, right }
         }
 
-        return node
+        if (!node) {
+            this.handleError(this.currentToken, 'expression')
+        } else {
+            return node
+        }
     }
 
     private parseTerm(): ExpressionNode {
@@ -132,7 +139,7 @@ export type ExpressionNode = BinaryOpNode | NumberNode | IdentifierNode
 export interface BinaryOpNode extends ASTNode {
     type: 'BinaryOp'
     operator: Operator
-    left: ExpressionNode
+    left?: ExpressionNode
     right: ExpressionNode
 }
 
