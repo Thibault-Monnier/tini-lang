@@ -3,18 +3,20 @@ export class Lexer {
 
     private input: string
     private pointerPos = 0
-    private lineNb = 0
+    private lineNb = 1
 
     constructor(input: string) {
         this.input = input
     }
 
     public getNextToken(): Token {
-        this.skipWhitespaces()
-
         if (this.pointerPos >= this.input.length) {
             return { type: 'EOF', lineNb: this.lineNb }
         }
+
+        this.skipWhitespaces()
+
+        const lineNb = this.lineNb
 
         let token: BareToken | null = null
         const char = this.input[this.pointerPos]
@@ -39,7 +41,7 @@ export class Lexer {
         if (token === null) {
             throw new Error(`Unexpected character: found ${char}`)
         } else {
-            return { ...token, lineNb: this.lineNb }
+            return { ...token, lineNb }
         }
     }
 
@@ -61,7 +63,6 @@ export class Lexer {
         const start = this.pointerPos
         while (this.isLetter(this.input[this.pointerPos])) {
             this.pointerPos++
-            console.log('increment', this.input[this.pointerPos])
         }
 
         const word = this.input.slice(start, this.pointerPos)

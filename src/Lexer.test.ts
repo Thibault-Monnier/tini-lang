@@ -20,8 +20,8 @@ const testCases: TestCase[] = [
         ],
     },
     {
-        description: 'Assignment with addition',
-        input: 'b = 1 + 2',
+        description: 'Assignment with addition an no spaces',
+        input: 'b=1+2',
         expectedTokens: [
             { type: 'IDENTIFIER', value: 'b', lineNb: 1 },
             { type: 'ASSIGN', lineNb: 1 },
@@ -43,12 +43,13 @@ const testCases: TestCase[] = [
         ],
     },
     {
-        description: 'Multiple statements with newlines',
+        description: 'Multiple statements with newlines and tabulations',
         input: `
-        a = 1
+        a=1
         b = a + 2 - 3
         print b`,
         expectedTokens: [
+            { type: 'NEWLINE', lineNb: 1 },
             { type: 'IDENTIFIER', value: 'a', lineNb: 2 },
             { type: 'ASSIGN', lineNb: 2 },
             { type: 'NUMBER', value: '1', lineNb: 2 },
@@ -68,16 +69,16 @@ const testCases: TestCase[] = [
     },
     {
         description: 'Unexpected character error',
-        input: 'a = 1 $',
+        input: 'a = 1$',
         expectedTokens: [],
-        expectedError: 'Unexpected character: $',
+        expectedError: 'Unexpected character: found $',
     },
 ]
 
 describe('Lexer Tests', () => {
     testCases.forEach(({ description, input, expectedTokens, expectedError }) => {
         test(description, () => {
-            const lexer = new Lexer(input.trim())
+            const lexer = new Lexer(input)
 
             const tokens: Token[] = []
             let token: Token
