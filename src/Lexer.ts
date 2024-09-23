@@ -125,4 +125,4 @@ export type Token = BareToken & { lineNb: number }
 
 export type TokenType = Token['type']
 
-export type Operator = '+' | '-'
+export type Operator = '+' | '-' | '*' | '/'

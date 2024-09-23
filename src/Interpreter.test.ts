@@ -15,22 +15,52 @@ const testCases: TestCase[] = [
         description: 'Simple assignment and print',
         input: `
       a = 1
-      b = 1 + 2
-      print b + 3
+      print a
     `,
-        expectedOutput: '6',
+        expectedOutput: '1',
     },
     {
-        description: 'Assignment with subtraction and print',
+        description: 'Addition',
         input: `
-      x = 10
-      y = x - 4
-      print y
+      a = 1 + 2
+      print a + 3
     `,
         expectedOutput: '6',
     },
     {
-        description: 'Using variables in expressions',
+        description: 'Subtraction',
+        input: `
+      a = 10 - 4
+      print a
+    `,
+        expectedOutput: '6',
+    },
+    {
+        description: 'Multiplication',
+        input: `
+      x = 10 * 4
+      print x
+    `,
+        expectedOutput: '40',
+    },
+    {
+        description: 'Division',
+        input: `
+      x = 12 / 4
+      print x
+    `,
+        expectedOutput: '3',
+    },
+    {
+        description: 'Order of operations',
+        input: `
+      x = 2 + 3 - 4 * 2 / 4
+      print x
+    `,
+        expectedOutput: '3',
+    },
+    {
+        description: 'Variables in expressions',
         input: `
       num = 5
       total = num + num + 5

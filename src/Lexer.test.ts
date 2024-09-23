@@ -73,6 +73,46 @@ const testCases: TestCase[] = [
         expectedTokens: [],
         expectedError: 'Unexpected character: found $',
     },
+    {
+        description: 'Many features test',
+        input: `
+        a=1 * 2
+        b = a + 2 - 3
+
+
+    print b`,
+        expectedTokens: [
+            { type: 'NEWLINE', lineNb: 1 },
+
+            { type: 'IDENTIFIER', value: 'a', lineNb: 2 },
+            { type: 'ASSIGN', lineNb: 2 },
+            { type: 'NUMBER', value: '1', lineNb: 2 },
+            { type: 'OPERATOR', value: '*', lineNb: 2 },
+            { type: 'NUMBER', value: '2', lineNb: 2 },
+            { type: 'NEWLINE', lineNb: 2 },
+
+            { type: 'IDENTIFIER', value: 'b', lineNb: 3 },
+            { type: 'ASSIGN', lineNb: 3 },
+            { type: 'IDENTIFIER', value: 'a', lineNb: 3 },
+            { type: 'OPERATOR', value: '+', lineNb: 3 },
+            { type: 'NUMBER', value: '2', lineNb: 3 },
+            { type: 'OPERATOR', value: '-', lineNb: 3 },
+            { type: 'NUMBER', value: '3', lineNb: 3 },
+            { type: 'NEWLINE', lineNb: 3 },
+
+            { type: 'NEWLINE', lineNb: 4 },
+
+            { type: 'PRINT', lineNb: 5 },
+            { type: 'IDENTIFIER', value: 'b', lineNb: 5 },
+            { type: 'EOF', lineNb: 5 },
+        ],
+    },
+    {
+        description: 'Unexpected character error',
+        input: 'a = 1$',
+        expectedTokens: [],
+        expectedError: 'Unexpected character: found $',
+    },
 ]
 
 describe('Lexer Tests', () => {

@@ -107,6 +107,138 @@ const testCases: TestCase[] = [
         },
     },
     {
+        description: 'Assignment with multiplication',
+        input: `
+      x = 10
+      y = x * 4
+      print y
+    `,
+        expectedAST: {
+            type: 'Program',
+            statements: [
+                {
+                    type: 'Assignment',
+                    identifier: 'x',
+                    expression: {
+                        type: 'Number',
+                        value: 10,
+                    },
+                },
+                {
+                    type: 'Assignment',
+                    identifier: 'y',
+                    expression: {
+                        type: 'BinaryOp',
+                        operator: '*',
+                        left: {
+                            type: 'Identifier',
+                            name: 'x',
+                        },
+                        right: {
+                            type: 'Number',
+                            value: 4,
+                        },
+                    },
+                },
+                {
+                    type: 'Print',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'y',
+                    },
+                },
+            ],
+        },
+    },
+    {
+        description: 'Assignment with division',
+        input: `
+      x = 12
+      y = x / 4
+      print y
+    `,
+        expectedAST: {
+            type: 'Program',
+            statements: [
+                {
+                    type: 'Assignment',
+                    identifier: 'x',
+                    expression: {
+                        type: 'Number',
+                        value: 12,
+                    },
+                },
+                {
+                    type: 'Assignment',
+                    identifier: 'y',
+                    expression: {
+                        type: 'BinaryOp',
+                        operator: '/',
+                        left: {
+                            type: 'Identifier',
+                            name: 'x',
+                        },
+                        right: {
+                            type: 'Number',
+                            value: 4,
+                        },
+                    },
+                },
+                {
+                    type: 'Print',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'y',
+                    },
+                },
+            ],
+        },
+    },
+    {
+        description: 'Assignment with subtraction',
+        input: `
+      x = 10
+      y = x - 4
+      print y
+    `,
+        expectedAST: {
+            type: 'Program',
+            statements: [
+                {
+                    type: 'Assignment',
+                    identifier: 'x',
+                    expression: {
+                        type: 'Number',
+                        value: 10,
+                    },
+                },
+                {
+                    type: 'Assignment',
+                    identifier: 'y',
+                    expression: {
+                        type: 'BinaryOp',
+                        operator: '-',
+                        left: {
+                            type: 'Identifier',
+                            name: 'x',
+                        },
+                        right: {
+                            type: 'Number',
+                            value: 4,
+                        },
+                    },
+                },
+                {
+                    type: 'Print',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'y',
+                    },
+                },
+            ],
+        },
+    },
+    {
         description: 'Undefined variable error',
         input: `
       print unknownVar
