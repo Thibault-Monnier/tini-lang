@@ -1,4 +1,4 @@
-import { Lexer, Operator, Token } from './Lexer'
+import { Lexer, Token } from './Lexer'
 
 interface TestCase {
     description: string
@@ -15,7 +15,7 @@ const testCases: TestCase[] = [
         expectedTokens: [
             { type: 'IDENTIFIER', value: 'a', lineNb: 1 },
             { type: 'ASSIGN', lineNb: 1 },
-            { type: 'NUMBER', value: '1', lineNb: 1 },
+            { type: 'LITERAL', value: '1', lineNb: 1 },
             { type: 'EOF', lineNb: 1 },
         ],
     },
@@ -25,9 +25,9 @@ const testCases: TestCase[] = [
         expectedTokens: [
             { type: 'IDENTIFIER', value: 'b', lineNb: 1 },
             { type: 'ASSIGN', lineNb: 1 },
-            { type: 'NUMBER', value: '1', lineNb: 1 },
-            { type: 'OPERATOR', value: '+', lineNb: 1 },
-            { type: 'NUMBER', value: '2', lineNb: 1 },
+            { type: 'LITERAL', value: '1', lineNb: 1 },
+            { type: 'BINOP', value: '+', lineNb: 1 },
+            { type: 'LITERAL', value: '2', lineNb: 1 },
             { type: 'EOF', lineNb: 1 },
         ],
     },
@@ -37,8 +37,8 @@ const testCases: TestCase[] = [
         expectedTokens: [
             { type: 'PRINT', lineNb: 1 },
             { type: 'IDENTIFIER', value: 'b', lineNb: 1 },
-            { type: 'OPERATOR', value: '+', lineNb: 1 },
-            { type: 'NUMBER', value: '3', lineNb: 1 },
+            { type: 'BINOP', value: '+', lineNb: 1 },
+            { type: 'LITERAL', value: '3', lineNb: 1 },
             { type: 'EOF', lineNb: 1 },
         ],
     },
@@ -52,15 +52,15 @@ const testCases: TestCase[] = [
             { type: 'NEWLINE', lineNb: 1 },
             { type: 'IDENTIFIER', value: 'a', lineNb: 2 },
             { type: 'ASSIGN', lineNb: 2 },
-            { type: 'NUMBER', value: '1', lineNb: 2 },
+            { type: 'LITERAL', value: '1', lineNb: 2 },
             { type: 'NEWLINE', lineNb: 2 },
             { type: 'IDENTIFIER', value: 'b', lineNb: 3 },
             { type: 'ASSIGN', lineNb: 3 },
             { type: 'IDENTIFIER', value: 'a', lineNb: 3 },
-            { type: 'OPERATOR', value: '+', lineNb: 3 },
-            { type: 'NUMBER', value: '2', lineNb: 3 },
-            { type: 'OPERATOR', value: '-', lineNb: 3 },
-            { type: 'NUMBER', value: '3', lineNb: 3 },
+            { type: 'BINOP', value: '+', lineNb: 3 },
+            { type: 'LITERAL', value: '2', lineNb: 3 },
+            { type: 'BINOP', value: '-', lineNb: 3 },
+            { type: 'LITERAL', value: '3', lineNb: 3 },
             { type: 'NEWLINE', lineNb: 3 },
             { type: 'PRINT', lineNb: 4 },
             { type: 'IDENTIFIER', value: 'b', lineNb: 4 },
@@ -86,18 +86,18 @@ const testCases: TestCase[] = [
 
             { type: 'IDENTIFIER', value: 'a', lineNb: 2 },
             { type: 'ASSIGN', lineNb: 2 },
-            { type: 'NUMBER', value: '1', lineNb: 2 },
-            { type: 'OPERATOR', value: '*', lineNb: 2 },
-            { type: 'NUMBER', value: '2', lineNb: 2 },
+            { type: 'LITERAL', value: '1', lineNb: 2 },
+            { type: 'BINOP', value: '*', lineNb: 2 },
+            { type: 'LITERAL', value: '2', lineNb: 2 },
             { type: 'NEWLINE', lineNb: 2 },
 
             { type: 'IDENTIFIER', value: 'b', lineNb: 3 },
             { type: 'ASSIGN', lineNb: 3 },
             { type: 'IDENTIFIER', value: 'a', lineNb: 3 },
-            { type: 'OPERATOR', value: '+', lineNb: 3 },
-            { type: 'NUMBER', value: '2', lineNb: 3 },
-            { type: 'OPERATOR', value: '-', lineNb: 3 },
-            { type: 'NUMBER', value: '3', lineNb: 3 },
+            { type: 'BINOP', value: '+', lineNb: 3 },
+            { type: 'LITERAL', value: '2', lineNb: 3 },
+            { type: 'BINOP', value: '-', lineNb: 3 },
+            { type: 'LITERAL', value: '3', lineNb: 3 },
             { type: 'NEWLINE', lineNb: 3 },
 
             { type: 'NEWLINE', lineNb: 4 },

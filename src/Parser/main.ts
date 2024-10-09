@@ -1,4 +1,4 @@
-import { Lexer, Operator, Token, TokenType } from '../Lexer'
+import { BinaryOperator, Lexer, Token, TokenType } from '../Lexer'
 
 export class Parser {
     private lexer: Lexer
@@ -67,15 +67,15 @@ export class Parser {
 
     private parseExpression(): ExpressionNode | never {
         let node: ExpressionNode | null = null
-        if (this.currentToken.type !== 'OPERATOR') {
+        if (this.currentToken.type !== 'BINOP') {
             node = this.parseTerm()
         }
 
-        while (this.currentToken.type === 'OPERATOR') {
+        while (this.currentToken.type === 'BINOP') {
             const operator = this.currentToken.value
             this.eat(this.currentToken.type)
             const right = this.parseTerm()
-            node = { type: 'BinaryOp', operator, left: node ? node : undefined, right }
+            node = { type: 'BinaryOperation', operator, left: node ? node : undefined, right }
         }
 
         if (!node) {
@@ -89,9 +89,9 @@ export class Parser {
         const currentToken = this.currentToken
 
         switch (currentToken.type) {
-            case 'NUMBER':
-                this.eat('NUMBER')
-                return { type: 'Number', value: parseInt(currentToken.value) }
+            case 'LITERAL':
+                this.eat('LITERAL')
+                return { type: 'Literal', value: parseInt(currentToken.value) }
             case 'IDENTIFIER':
                 this.eat('IDENTIFIER')
                 return { type: 'Identifier', name: currentToken.value }
@@ -123,28 +123,30 @@ export interface ProgramNode extends ASTNode {
 
 export type StatementNode = AssignmentNode | PrintNode
 
+export interface PrintNode extends ASTNode {
+    type: 'Print'
+    expression: ExpressionNode
+}
+
 export interface AssignmentNode extends ASTNode {
     type: 'Assignment'
     identifier: string
     expression: ExpressionNode
 }
 
-export interface PrintNode extends ASTNode {
-    type: 'Print'
-    expression: ExpressionNode
-}
+export type ExpressionNode = BinaryOperationNode | TermNode
 
-export type ExpressionNode = BinaryOpNode | NumberNode | IdentifierNode
-
-export interface BinaryOpNode extends ASTNode {
-    type: 'BinaryOp'
-    operator: Operator
+export interface BinaryOperationNode extends ASTNode {
+    type: 'BinaryOperation'
     left?: ExpressionNode
+    operator: BinaryOperator
     right: ExpressionNode
 }
 
-export interface NumberNode extends ASTNode {
-    type: 'Number'
+type TermNode = LiteralNode | IdentifierNode
+
+export interface LiteralNode extends ASTNode {
+    type: 'Literal'
     value: number
 }
 

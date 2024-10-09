@@ -52,10 +52,10 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 ### Terminals
 
 -   `IDENTIFIER` → Variable names (e.g., `a`, `b`)
--   `NUMBER` → Numeric literals (e.g., `1`, `2`)
+-   `LITERAL` → Numeric literals (e.g., `1`, `2`)
 -   `PRINT` → The keyword `print`
 -   `ASSIGN` → The assignment operator `=`
--   `OPERATOR` → The operators addition, subtraction, multiplication, division: `+` / `-` / `*` / `/`
+-   `BINOP` → The operators addition, subtraction, multiplication, division: `+` / `-` / `*` / `/`
 -   `NEWLINE` → Line separator
 -   `EOF` → End of file/input
 

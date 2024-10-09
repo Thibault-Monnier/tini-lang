@@ -26,7 +26,7 @@ export class Interpreter {
 
     private evaluate(node: ExpressionNode): number {
         switch (node.type) {
-            case 'BinaryOp':
+            case 'BinaryOperation': 
                 const left = node.left ? this.evaluate(node.left) : 0
                 const right = this.evaluate(node.right)
 
@@ -51,7 +51,7 @@ export class Interpreter {
 
                 return value
 
-            case 'Number':
+            case 'Literal':
                 return node.value
         }
     }

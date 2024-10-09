@@ -1,4 +1,4 @@
-import { Lexer, Operator } from '../Lexer'
+import { Lexer } from '../Lexer'
 import { Parser, ProgramNode } from './main'
 
 interface TestCase {
@@ -24,7 +24,7 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'a',
                     expression: {
-                        type: 'Number',
+                        type: 'Literal',
                         value: 1,
                     },
                 },
@@ -32,14 +32,14 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'b',
                     expression: {
-                        type: 'BinaryOp',
+                        type: 'BinaryOperation',
                         operator: '+',
                         left: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 1,
                         },
                         right: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 2,
                         },
                     },
@@ -47,14 +47,14 @@ const testCases: TestCase[] = [
                 {
                     type: 'Print',
                     expression: {
-                        type: 'BinaryOp',
+                        type: 'BinaryOperation',
                         operator: '+',
                         left: {
                             type: 'Identifier',
                             name: 'b',
                         },
                         right: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 3,
                         },
                     },
@@ -76,7 +76,7 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'x',
                     expression: {
-                        type: 'Number',
+                        type: 'Literal',
                         value: 10,
                     },
                 },
@@ -84,14 +84,14 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'y',
                     expression: {
-                        type: 'BinaryOp',
+                        type: 'BinaryOperation',
                         operator: '-',
                         left: {
                             type: 'Identifier',
                             name: 'x',
                         },
                         right: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 4,
                         },
                     },
@@ -120,7 +120,7 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'x',
                     expression: {
-                        type: 'Number',
+                        type: 'Literal',
                         value: 10,
                     },
                 },
@@ -128,14 +128,14 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'y',
                     expression: {
-                        type: 'BinaryOp',
+                        type: 'BinaryOperation',
                         operator: '*',
                         left: {
                             type: 'Identifier',
                             name: 'x',
                         },
                         right: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 4,
                         },
                     },
@@ -164,7 +164,7 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'x',
                     expression: {
-                        type: 'Number',
+                        type: 'Literal',
                         value: 12,
                     },
                 },
@@ -172,14 +172,14 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'y',
                     expression: {
-                        type: 'BinaryOp',
+                        type: 'BinaryOperation',
                         operator: '/',
                         left: {
                             type: 'Identifier',
                             name: 'x',
                         },
                         right: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 4,
                         },
                     },
@@ -208,7 +208,7 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'x',
                     expression: {
-                        type: 'Number',
+                        type: 'Literal',
                         value: 10,
                     },
                 },
@@ -216,14 +216,14 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'y',
                     expression: {
-                        type: 'BinaryOp',
+                        type: 'BinaryOperation',
                         operator: '-',
                         left: {
                             type: 'Identifier',
                             name: 'x',
                         },
                         right: {
-                            type: 'Number',
+                            type: 'Literal',
                             value: 4,
                         },
                     },

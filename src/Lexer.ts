@@ -24,7 +24,7 @@ export class Lexer {
         if (this.isLetter(char)) {
             token = this.extractWord()
         } else if (this.isDigit(char)) {
-            token = this.extractNumber()
+            token = this.extractLiteral()
         } else if (this.isOperator(char)) {
             token = this.extractOperator()
         } else {
@@ -82,18 +82,18 @@ export class Lexer {
         return /[0-9]/.test(char)
     }
 
-    private extractNumber(): BareToken {
+    private extractLiteral(): BareToken {
         const start = this.pointerPos
         while (this.isDigit(this.input[this.pointerPos])) {
             this.pointerPos++
         }
 
         const value = this.input.slice(start, this.pointerPos)
-        return { type: 'NUMBER', value }
+        return { type: 'LITERAL', value }
     }
 
-    private isOperator(char: any): char is Operator {
-        return (operators as readonly string[]).includes(char)
+    private isOperator(char: any): char is BinaryOperator {
+        return (binaryOperators as readonly string[]).includes(char)
     }
 
     private extractOperator(): BareToken {
@@ -101,7 +101,7 @@ export class Lexer {
 
         if (this.isOperator(value)) {
             this.pointerPos++
-            return { type: 'OPERATOR', value }
+            return { type: 'BINOP', value }
         } else {
             throw new Error(`Unexpected operator: found ${value}`)
         }
@@ -110,12 +110,12 @@ export class Lexer {
 
 type BareToken =
     | {
-          type: 'IDENTIFIER' | 'NUMBER'
+          type: 'IDENTIFIER' | 'LITERAL'
           value: string
       }
     | {
-          type: 'OPERATOR'
-          value: Operator
+          type: 'BINOP'
+          value: BinaryOperator
       }
     | {
           type: 'ASSIGN' | 'PRINT' | 'NEWLINE' | 'EOF'
@@ -125,6 +125,6 @@ export type Token = BareToken & { lineNb: number }
 
 export type TokenType = Token['type']
 
-const operators = ['+', '-', '*', '/'] as const
+const binaryOperators = ['+', '-', '*', '/'] as const
 
-export type Operator = (typeof operators)[number]
+export type BinaryOperator = (typeof binaryOperators)[number]
