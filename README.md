@@ -55,7 +55,7 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 -   `NUMBER` → Numeric literals (e.g., `1`, `2`)
 -   `PRINT` → The keyword `print`
 -   `ASSIGN` → The assignment operator `=`
--   `OPERATOR` → The operators addition, subtraction, multiplication, division:  `+` / `-` / `*` / `/`
+-   `OPERATOR` → The operators addition, subtraction, multiplication, division: `+` / `-` / `*` / `/`
 -   `NEWLINE` → Line separator
 -   `EOF` → End of file/input
 
@@ -121,8 +121,7 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 ### Operator Precedence and Associativity
 
 -   Operators `+`, `-`, `*`, `/` are **left-associative**.
--   `+` and `-` have precedence level 1 (the larger, the higher the precedence).
--   `*` and `-` have precedence level 2.
+-   `+`, `-`, `*`, and `/` all have the same precedence level.
 
 ---
 
