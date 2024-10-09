@@ -1,4 +1,4 @@
-import { Lexer } from '../Lexer'
+import { Lexer, Operator } from '../Lexer'
 import { Parser, ProgramNode } from './main'
 
 interface TestCase {

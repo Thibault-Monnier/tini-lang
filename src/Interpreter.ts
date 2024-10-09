@@ -30,12 +30,17 @@ export class Interpreter {
                 const left = node.left ? this.evaluate(node.left) : 0
                 const right = this.evaluate(node.right)
 
-                if (node.operator === '+') {
-                    return left + right
-                } else if (node.operator === '-') {
-                    return left - right
-                } else {
-                    throw new Error(`Unknown operator: ${node.operator}`)
+                switch (node.operator) {
+                    case '+':
+                        return left + right
+                    case '-':
+                        return left - right
+                    case '*':
+                        return left * right
+                    case '/':
+                        return left / right
+                    default:
+                        throw new Error(`Unknown operator: ${node.operator}`)
                 }
 
             case 'Identifier':

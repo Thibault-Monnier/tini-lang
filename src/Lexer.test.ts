@@ -1,4 +1,4 @@
-import { Lexer, Token } from './Lexer'
+import { Lexer, Operator, Token } from './Lexer'
 
 interface TestCase {
     description: string

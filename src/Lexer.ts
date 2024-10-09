@@ -92,8 +92,8 @@ export class Lexer {
         return { type: 'NUMBER', value }
     }
 
-    private isOperator(char: string): boolean {
-        return Operators.has(char as Operator)
+    private isOperator(char: any): char is Operator {
+        return (operators as readonly string[]).includes(char)
     }
 
     private extractOperator(): BareToken {
@@ -101,7 +101,7 @@ export class Lexer {
 
         if (this.isOperator(value)) {
             this.pointerPos++
-            return { type: 'OPERATOR', value: value as Operator }
+            return { type: 'OPERATOR', value }
         } else {
             throw new Error(`Unexpected operator: found ${value}`)
         }
@@ -125,6 +125,6 @@ export type Token = BareToken & { lineNb: number }
 
 export type TokenType = Token['type']
 
-const Operators = new Set(['+', '-', '*', '/'] as const)
+const operators = ['+', '-', '*', '/'] as const
 
-export type Operator = typeof Operators extends Set<infer T> ? T : never
+export type Operator = (typeof operators)[number]
