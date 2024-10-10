@@ -11,12 +11,11 @@ interface TestCase {
 // Sample programs and expected ASTs for testing
 const testCases: TestCase[] = [
     {
-        description: 'Simple assignment and print',
+        description: 'Term assignment and print',
         input: `
-      a = 1
-      b = 1 + 2
-      print b + 3
-    `,
+        a = 1
+        print a
+        `,
         expectedAST: {
             type: 'Program',
             statements: [
@@ -29,34 +28,76 @@ const testCases: TestCase[] = [
                     },
                 },
                 {
-                    type: 'Assignment',
-                    identifier: 'b',
+                    type: 'Print',
                     expression: {
-                        type: 'BinaryOperation',
-                        operator: '+',
-                        left: {
+                        type: 'Identifier',
+                        name: 'a',
+                    },
+                },
+            ],
+        },
+    },
+    {
+        description: 'Unary operation',
+        input: `
+        a = -1
+        print a
+        `,
+        expectedAST: {
+            type: 'Program',
+            statements: [
+                {
+                    type: 'Assignment',
+                    identifier: 'a',
+                    expression: {
+                        type: 'UnaryOperation',
+                        operator: '-',
+                        argument: {
                             type: 'Literal',
                             value: 1,
-                        },
-                        right: {
-                            type: 'Literal',
-                            value: 2,
                         },
                     },
                 },
                 {
                     type: 'Print',
                     expression: {
+                        type: 'Identifier',
+                        name: 'a',
+                    },
+                },
+            ],
+        },
+    },
+    {
+        description: 'Binary operation',
+        input: `
+        a = 2 + 3
+        print a
+        `,
+        expectedAST: {
+            type: 'Program',
+            statements: [
+                {
+                    type: 'Assignment',
+                    identifier: 'a',
+                    expression: {
                         type: 'BinaryOperation',
-                        operator: '+',
                         left: {
-                            type: 'Identifier',
-                            name: 'b',
+                            type: 'Literal',
+                            value: 2,
                         },
+                        operator: '+',
                         right: {
                             type: 'Literal',
                             value: 3,
                         },
+                    },
+                },
+                {
+                    type: 'Print',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'a',
                     },
                 },
             ],
@@ -65,7 +106,7 @@ const testCases: TestCase[] = [
     {
         description: 'Assignment with subtraction',
         input: `
-      x = 10
+      x = 10 * 3
       y = x - 4
       print y
     `,
@@ -76,8 +117,16 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'x',
                     expression: {
-                        type: 'Literal',
-                        value: 10,
+                        type: 'BinaryOperation',
+                        left: {
+                            type: 'Literal',
+                            value: 10,
+                        },
+                        operator: '*',
+                        right: {
+                            type: 'Literal',
+                            value: 3,
+                        },
                     },
                 },
                 {
@@ -85,11 +134,11 @@ const testCases: TestCase[] = [
                     identifier: 'y',
                     expression: {
                         type: 'BinaryOperation',
-                        operator: '-',
                         left: {
                             type: 'Identifier',
                             name: 'x',
                         },
+                        operator: '-',
                         right: {
                             type: 'Literal',
                             value: 4,
@@ -106,6 +155,7 @@ const testCases: TestCase[] = [
             ],
         },
     },
+
     {
         description: 'Assignment with multiplication',
         input: `
@@ -195,72 +245,79 @@ const testCases: TestCase[] = [
         },
     },
     {
-        description: 'Assignment with subtraction',
+        description: 'Depth 2 binary operation',
         input: `
-      x = 10
-      y = x - 4
-      print y
+      a = -1
+      b = 1 + 2 - a
     `,
         expectedAST: {
             type: 'Program',
             statements: [
                 {
                     type: 'Assignment',
-                    identifier: 'x',
+                    identifier: 'a',
                     expression: {
                         type: 'Literal',
-                        value: 10,
+                        value: 1,
                     },
                 },
                 {
                     type: 'Assignment',
-                    identifier: 'y',
+                    identifier: 'b',
                     expression: {
                         type: 'BinaryOperation',
-                        operator: '-',
                         left: {
-                            type: 'Identifier',
-                            name: 'x',
-                        },
-                        right: {
                             type: 'Literal',
-                            value: 4,
+                            value: 1,
+                        },
+                        operator: '+',
+                        right: {
+                            type: 'BinaryOperation',
+                            left: {
+                                type: 'Literal',
+                                value: 2,
+                            },
+                            operator: '-',
+                            right: {
+                                type: 'Identifier',
+                                name: 'a',
+                            },
                         },
                     },
                 },
-                {
-                    type: 'Print',
-                    expression: {
-                        type: 'Identifier',
-                        name: 'y',
-                    },
-                },
             ],
         },
     },
-    {
-        description: 'Undefined variable error',
-        input: `
-      print unknownVar
-    `,
-        expectedAST: {
-            type: 'Program',
-            statements: [
-                {
-                    type: 'Print',
-                    expression: {
-                        type: 'Identifier',
-                        name: 'unknownVar',
-                    },
-                },
-            ],
-        },
-    },
+
     {
         description: 'Syntax error due to missing operator',
         input: `
       a = 5
       b = a 5
+    `,
+        expectedAST: null,
+        expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Print statement with no expression',
+        input: `
+      print
+    `,
+        expectedAST: null,
+        expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Assignment with missing expression',
+        input: `
+        a =
+    `,
+        expectedAST: null,
+        expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Assignment with missing identifier',
+        input: `
+        = 5
     `,
         expectedAST: null,
         expectedError: 'Unexpected token',

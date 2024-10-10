@@ -1,4 +1,4 @@
-import { BinaryOperator, Lexer, Token, TokenType } from '../Lexer'
+import { Lexer, Token, TokenType } from '../Lexer'
 
 export class Parser {
     private lexer: Lexer
@@ -54,7 +54,7 @@ export class Parser {
 
     private parseAssignment(identifier: string): AssignmentNode {
         this.eat('IDENTIFIER')
-        this.eat('ASSIGN')
+        this.eat('=')
         const expression = this.parseExpression()
         return { type: 'Assignment', identifier, expression }
     }
@@ -66,34 +66,70 @@ export class Parser {
     }
 
     private parseExpression(): ExpressionNode | never {
-        let node: ExpressionNode | null = null
-        if (this.currentToken.type !== 'BINOP') {
-            node = this.parseTerm()
-        }
-
-        while (this.currentToken.type === 'BINOP') {
-            const operator = this.currentToken.value
+        const expressionTokens = []
+        while (this.currentToken.type !== 'NEWLINE' && this.currentToken.type !== 'EOF') {
+            expressionTokens.push(this.currentToken)
             this.eat(this.currentToken.type)
-            const right = this.parseTerm()
-            node = { type: 'BinaryOperation', operator, left: node ? node : undefined, right }
         }
 
-        if (!node) {
+        if (expressionTokens.length === 0) {
             this.handleError(this.currentToken, 'expression')
+        }
+
+        const firstToken = expressionTokens[0]
+        if (expressionTokens.length === 1) {
+            return this.parseTerm(firstToken)
+        } else if (firstToken.type === '+' || firstToken.type === '-') {
+            return this.parseUnaryOperation(firstToken.type, expressionTokens[1])
         } else {
-            return node
+            return this.parseBinaryOperation(expressionTokens)
         }
     }
 
-    private parseTerm(): ExpressionNode {
-        const currentToken = this.currentToken
+    private parseUnaryOperation(operator: UnaryOperator, term: Token): UnaryOperationNode | never {
+        const argument = this.parseTerm(term)
+        return { type: 'UnaryOperation', operator, argument }
+    }
+
+    private parseBinaryOperation(tokens: Array<Token>): BinaryOperationNode | never {
+        let node: BinaryOperationNode | null = null
+
+        const left = this.parseTerm(tokens[0])
+
+        let currentTokenIndex = 1
+        while (
+            currentTokenIndex < tokens.length &&
+            (tokens[currentTokenIndex].type === '+' ||
+                tokens[currentTokenIndex].type === '-' ||
+                tokens[currentTokenIndex].type === '*' ||
+                tokens[currentTokenIndex].type === '/')
+        ) {
+            const operator: BinaryOperator = tokens[currentTokenIndex].type as '+' | '-' | '*' | '/'
+            currentTokenIndex++
+            const term = this.parseTerm(tokens[currentTokenIndex])
+            currentTokenIndex++
+            node = {
+                type: 'BinaryOperation',
+                left: term,
+                operator,
+                right: node || left,
+            }
+        }
+
+        if (node) {
+            return node
+        } else {
+            this.handleError(this.currentToken, 'binary operation')
+        }
+    }
+
+    private parseTerm(term: Token): TermNode | never {
+        const currentToken = term
 
         switch (currentToken.type) {
             case 'LITERAL':
-                this.eat('LITERAL')
                 return { type: 'Literal', value: parseInt(currentToken.value) }
             case 'IDENTIFIER':
-                this.eat('IDENTIFIER')
                 return { type: 'Identifier', name: currentToken.value }
             default:
                 this.handleError(currentToken, 'term')
@@ -134,16 +170,25 @@ export interface AssignmentNode extends ASTNode {
     expression: ExpressionNode
 }
 
-export type ExpressionNode = BinaryOperationNode | TermNode
+export type ExpressionNode = BinaryOperationNode | UnaryOperationNode | TermNode
 
 export interface BinaryOperationNode extends ASTNode {
     type: 'BinaryOperation'
-    left?: ExpressionNode
+    left: ExpressionNode
     operator: BinaryOperator
     right: ExpressionNode
 }
 
-type TermNode = LiteralNode | IdentifierNode
+export interface UnaryOperationNode extends ASTNode {
+    type: 'UnaryOperation'
+    operator: UnaryOperator
+    argument: ExpressionNode
+}
+
+export type BinaryOperator = '+' | '-' | '*' | '/'
+export type UnaryOperator = '+' | '-'
+
+export type TermNode = LiteralNode | IdentifierNode
 
 export interface LiteralNode extends ASTNode {
     type: 'Literal'
