@@ -10,32 +10,40 @@ export class Lexer {
     }
 
     public getNextToken(): Token {
+        while (this.currentChar === ' ' || this.currentChar === '\t') this.pointerPos++
+
         if (this.pointerPos >= this.input.length) {
             return { type: 'EOF', lineNb: this.lineNb }
         }
 
-        this.skipWhitespaces()
-
         const lineNb = this.lineNb
 
         let token: BareToken | null = null
-        const char = this.input[this.pointerPos]
+        const char = this.currentChar
 
-        if (this.isLetter(char)) {
-            token = this.extractWord()
-        } else if (this.isDigit(char)) {
-            token = this.extractLiteral()
-        } else if (this.isOperator(char)) {
-            token = this.extractOperator()
-        } else {
-            if (char === '\n') {
-                token = { type: 'NEWLINE' }
-                this.lineNb++
-            } else if (char === '=') {
-                token = { type: 'ASSIGN' }
-            }
+        switch (true) {
+            case /[0-9]/.test(char):
+                token = this.extractLiteral()
+                break
+            case /[a-zA-Z]/.test(char):
+                token = this.extractWord()
+                break
+            default:
+                switch (char) {
+                    case '\n':
+                        token = { type: 'NEWLINE' }
+                        this.lineNb++
+                        break
+                    case '=':
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                        token = { type: char }
+                        break
+                }
 
-            this.pointerPos++
+                this.pointerPos++
         }
 
         if (token === null) {
@@ -45,25 +53,14 @@ export class Lexer {
         }
     }
 
-    private isWhitespace(char: string) {
-        return char === ' ' || char === '\t'
-    }
-
-    private skipWhitespaces() {
-        while (this.isWhitespace(this.input[this.pointerPos])) {
-            this.pointerPos++
-        }
-    }
-
-    private isLetter(char: string): boolean {
-        return typeof char === 'string' && /[a-zA-Z]/.test(char) // Make sure undefined doesn't return true
+    private get currentChar(): string {
+        return this.input[this.pointerPos]
     }
 
     private extractWord(): BareToken {
         const start = this.pointerPos
-        while (this.isLetter(this.input[this.pointerPos])) {
+        while (typeof this.currentChar === 'string' && /[a-zA-Z]/.test(this.currentChar))
             this.pointerPos++
-        }
 
         const word = this.input.slice(start, this.pointerPos)
         if (this.reservedKeywords.has(word)) {
@@ -78,33 +75,12 @@ export class Lexer {
         }
     }
 
-    private isDigit(char: string): boolean {
-        return /[0-9]/.test(char)
-    }
-
     private extractLiteral(): BareToken {
         const start = this.pointerPos
-        while (this.isDigit(this.input[this.pointerPos])) {
-            this.pointerPos++
-        }
+        while (/[0-9]/.test(this.currentChar)) this.pointerPos++
 
         const value = this.input.slice(start, this.pointerPos)
         return { type: 'LITERAL', value }
-    }
-
-    private isOperator(char: any): char is BinaryOperator {
-        return (binaryOperators as readonly string[]).includes(char)
-    }
-
-    private extractOperator(): BareToken {
-        const value = this.input[this.pointerPos]
-
-        if (this.isOperator(value)) {
-            this.pointerPos++
-            return { type: 'BINOP', value }
-        } else {
-            throw new Error(`Unexpected operator: found ${value}`)
-        }
     }
 }
 
@@ -114,17 +90,9 @@ type BareToken =
           value: string
       }
     | {
-          type: 'BINOP'
-          value: BinaryOperator
-      }
-    | {
-          type: 'ASSIGN' | 'PRINT' | 'NEWLINE' | 'EOF'
+          type: 'PRINT' | 'NEWLINE' | 'EOF' | '+' | '-' | '*' | '/' | '='
       }
 
 export type Token = BareToken & { lineNb: number }
 
 export type TokenType = Token['type']
-
-const binaryOperators = ['+', '-', '*', '/'] as const
-
-export type BinaryOperator = (typeof binaryOperators)[number]
