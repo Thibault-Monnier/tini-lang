@@ -68,6 +68,17 @@ const testCases: TestCase[] = [
         ],
     },
     {
+        description: 'EOF after newlines',
+        input: `
+
+        `,
+        expectedTokens: [
+            { type: 'NEWLINE', lineNb: 1 },
+            { type: 'NEWLINE', lineNb: 2 },
+            { type: 'EOF', lineNb: 3 },
+        ],
+    },
+    {
         description: 'Unexpected character error',
         input: 'a = 1$',
         expectedTokens: [],
