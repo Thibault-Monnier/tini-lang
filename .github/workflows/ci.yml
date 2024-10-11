@@ -1,6 +1,9 @@
 name: CI
 
-on: push
+on:
+    push:
+        branches:
+            - '**' # Listen to all branches
 
 jobs:
     test:
@@ -20,3 +23,11 @@ jobs:
 
             - name: Run tests
               run: npm test
+
+    notify:
+        if: failure() && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Send failure notification
+              run: exit 1
