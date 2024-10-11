@@ -257,8 +257,12 @@ const testCases: TestCase[] = [
                     type: 'Assignment',
                     identifier: 'a',
                     expression: {
-                        type: 'Literal',
-                        value: 1,
+                        type: 'UnaryOperation',
+                        operator: '-',
+                        argument: {
+                            type: 'Literal',
+                            value: 1,
+                        },
                     },
                 },
                 {
@@ -267,21 +271,21 @@ const testCases: TestCase[] = [
                     expression: {
                         type: 'BinaryOperation',
                         left: {
-                            type: 'Literal',
-                            value: 1,
-                        },
-                        operator: '+',
-                        right: {
                             type: 'BinaryOperation',
                             left: {
                                 type: 'Literal',
+                                value: 1,
+                            },
+                            operator: '+',
+                            right: {
+                                type: 'Literal',
                                 value: 2,
                             },
-                            operator: '-',
-                            right: {
-                                type: 'Identifier',
-                                name: 'a',
-                            },
+                        },
+                        operator: '-',
+                        right: {
+                            type: 'Identifier',
+                            name: 'a',
                         },
                     },
                 },

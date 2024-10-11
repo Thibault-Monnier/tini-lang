@@ -110,9 +110,9 @@ export class Parser {
             currentTokenIndex++
             node = {
                 type: 'BinaryOperation',
-                left: term,
+                left: node || left,
                 operator,
-                right: node || left,
+                right: term,
             }
         }
 
