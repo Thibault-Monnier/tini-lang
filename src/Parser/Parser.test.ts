@@ -1,5 +1,6 @@
 import { Lexer } from '../Lexer'
-import { Parser, ProgramNode } from './main'
+import { Parser } from './main'
+import { ProgramNode } from './nodeTypes'
 
 interface TestCase {
     description: string
@@ -292,12 +293,20 @@ const testCases: TestCase[] = [
             ],
         },
     },
-
     {
         description: 'Syntax error due to missing operator',
         input: `
       a = 5
       b = a 5
+    `,
+        expectedAST: null,
+        expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Syntax error due to missing operator',
+        input: `
+      a = 5
+      b = a + 2 5 - a
     `,
         expectedAST: null,
         expectedError: 'Unexpected token',
