@@ -88,14 +88,7 @@ export class Parser {
             this.handleError(this.currentToken, 'expression')
         }
 
-        const firstToken = expressionTokens[0]
-        if (expressionTokens.length === 1) {
-            return this.parseTerm(firstToken)
-        } else if (firstToken.type === '+' || firstToken.type === '-') {
-            return this.parseUnaryOperation(firstToken.type, expressionTokens[1])
-        } else {
-            return this.parseBinaryOperation(expressionTokens)
-        }
+        return this.parseBinaryOperation(expressionTokens)
     }
 
     private parseUnaryOperation(operator: UnaryOperator, term: Token): UnaryOperationNode | never {
@@ -103,13 +96,19 @@ export class Parser {
         return { type: 'UnaryOperation', operator, argument }
     }
 
-    private parseBinaryOperation(tokens: Array<Token>): BinaryOperationNode | TermNode | never {
+    private parseBinaryOperation(tokens: Array<Token>): ExpressionNode | never {
+        if (tokens.length === 1) return this.parseTerm(tokens[0])
+        else if (tokens.length === 2 && (tokens[0].type === '+' || tokens[0].type === '-')) {
+            return this.parseUnaryOperation(tokens[0].type, tokens[1])
+        }
+
         const parseOnePrecedenceLevel = (
             precedenceLevel: number,
         ): BinaryOperationNode | null | never => {
             const operators = ['+', '-', '*', '/']
+            const nonUnaryOperators = ['*', '/']
 
-            if (operators.includes(tokens[0].type)) {
+            if (nonUnaryOperators.includes(tokens[0].type)) {
                 this.handleError(tokens[0], 'binary operation')
             } else if (operators.includes(tokens[tokens.length - 1].type)) {
                 this.handleError(tokens[tokens.length - 1], 'binary operation')
@@ -136,7 +135,7 @@ export class Parser {
             return null
         }
 
-        // Try to parse binary operations with higher precedence levels first
+        // Try to parse binary operations with lower precedence levels first
         for (let precedenceLevel = 1; precedenceLevel <= 2; precedenceLevel++) {
             const result = parseOnePrecedenceLevel(precedenceLevel)
             if (result) {
@@ -144,12 +143,8 @@ export class Parser {
             }
         }
 
-        // There is no operator in the expression
-        if (tokens.length === 1) {
-            return this.parseTerm(tokens[0])
-        } else {
-            this.handleError(tokens[1], 'binary operation')
-        }
+        // If we reach this point, it means that we have a syntax error
+        this.handleError(tokens[0], 'binary operation')
     }
 
     private parseTerm(term: Token): TermNode | never {
