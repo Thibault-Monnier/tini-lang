@@ -1,4 +1,4 @@
-import { ProgramNode, StatementNode, ExpressionNode } from './Parser/main'
+import { ProgramNode, StatementNode, ExpressionNode } from './Parser/nodeTypes'
 import { printSeparator } from './printUtils'
 
 export class Interpreter {
