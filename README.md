@@ -47,7 +47,7 @@ You can run all tests with `npm run test`, or a specific file with `npm run test
 
 ## Grammar
 
-Below is the formal LALR grammar for `tini-lang`. Note that it will change since the language is in an experimental state.
+Below is the formal LALR grammar for `tini-lang`. Note that it will regularly change since the language is in an experimental state.
 
 ### Terminals
 
@@ -121,7 +121,8 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will change since
 ### Operator Precedence and Associativity
 
 -   Operators `+`, `-`, `*`, `/` are **left-associative**.
--   `+`, `-`, `*`, and `/` all have the same precedence level.
+-   `+` and `-` have precedence level 1.
+-   `*` and `/` have precedence level 2.
 
 ---
 
