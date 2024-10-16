@@ -8,6 +8,7 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
+        continue-on-error: ${{ github.ref != 'refs/heads/main' }} # Suppress failure notifications on non-main branches
 
         steps:
             - name: Checkout repository
@@ -25,6 +26,7 @@ jobs:
               run: npm test
 
     notify:
+        needs: test
         if: failure() && github.ref == 'refs/heads/main'
         runs-on: ubuntu-latest
 
