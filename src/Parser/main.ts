@@ -107,15 +107,21 @@ export class Parser {
         const parseOnePrecedenceLevel = (
             precedenceLevel: number,
         ): BinaryOperationNode | null | never => {
-            let currentTokenIndex = tokens.length - 2 // The last token is a term
+            const operators = ['+', '-', '*', '/']
+
+            if (operators.includes(tokens[0].type)) {
+                this.handleError(tokens[0], 'binary operation')
+            } else if (operators.includes(tokens[tokens.length - 1].type)) {
+                this.handleError(tokens[tokens.length - 1], 'binary operation')
+            }
+
+            let currentTokenIndex = tokens.length - 2
 
             while (currentTokenIndex >= 1) {
-                // The first token is a term
-
                 const currentToken = tokens[currentTokenIndex]
 
                 if (
-                    ['+', '-', '*', '/'].includes(currentToken.type) &&
+                    operators.includes(currentToken.type) &&
                     LevelOfPrecedence[currentToken.type as BinaryOperator] === precedenceLevel
                 ) {
                     const operator: BinaryOperator = currentToken.type as BinaryOperator
