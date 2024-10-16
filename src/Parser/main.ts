@@ -103,39 +103,64 @@ export class Parser {
         return { type: 'UnaryOperation', operator, argument }
     }
 
-    private parseBinaryOperation(tokens: Array<Token>): BinaryOperationNode | never {
-        let node: BinaryOperationNode | null = null
+    private parseBinaryOperation(tokens: Array<Token>): BinaryOperationNode | TermNode | never {
+        let currentTokenIndex = tokens.length - 1
 
-        const left = this.parseTerm(tokens[0])
-
-        let currentTokenIndex = 1
-        while (
-            currentTokenIndex < tokens.length &&
-            (tokens[currentTokenIndex].type === '+' ||
-                tokens[currentTokenIndex].type === '-' ||
-                tokens[currentTokenIndex].type === '*' ||
-                tokens[currentTokenIndex].type === '/')
-        ) {
-            const operator: BinaryOperator = tokens[currentTokenIndex].type as '+' | '-' | '*' | '/'
-            currentTokenIndex++
-            const term = this.parseTerm(tokens[currentTokenIndex])
-            currentTokenIndex++
-            node = {
-                type: 'BinaryOperation',
-                left: node || left,
-                operator,
-                right: term,
+        while (currentTokenIndex >= 0) {
+            const currentToken = tokens[currentTokenIndex]
+            if (
+                currentToken.type !== '+' &&
+                currentToken.type !== '-' &&
+                currentToken.type !== '*' &&
+                currentToken.type !== '/'
+            ) {
+                currentTokenIndex--
+                continue
+            } else {
+                if (LevelOfPrecedence[currentToken.type] === 1) {
+                    const operator: BinaryOperator = currentToken.type
+                    const left = this.parseBinaryOperation(tokens.slice(0, currentTokenIndex))
+                    const right = this.parseBinaryOperation(tokens.slice(currentTokenIndex + 1))
+                    return { type: 'BinaryOperation', left, operator, right }
+                } else {
+                    currentTokenIndex--
+                    continue
+                }
             }
         }
 
-        if (currentTokenIndex < tokens.length) {
-            this.handleError(tokens[currentTokenIndex], 'operator')
+        // There is no LevelOfPrecedence 1 operator in the expression
+        currentTokenIndex = tokens.length - 1
+
+        while (currentTokenIndex >= 0) {
+            const currentToken = tokens[currentTokenIndex]
+            if (
+                currentToken.type !== '+' &&
+                currentToken.type !== '-' &&
+                currentToken.type !== '*' &&
+                currentToken.type !== '/'
+            ) {
+                currentTokenIndex--
+                continue
+            } else {
+                if (LevelOfPrecedence[currentToken.type] === 2) {
+                    const operator: BinaryOperator = currentToken.type
+                    const left = this.parseBinaryOperation(tokens.slice(0, currentTokenIndex))
+                    const right = this.parseBinaryOperation(tokens.slice(currentTokenIndex + 1))
+                    return { type: 'BinaryOperation', left, operator, right }
+                } else {
+                    currentTokenIndex--
+                    continue
+                }
+            }
         }
 
-        if (node) {
-            return node
+        // There is no operator in the expression
+        if (tokens.length === 1) {
+            return this.parseTerm(tokens[0])
         } else {
-            this.handleError(this.currentToken, 'binary operation')
+            console.log(tokens[1])
+            this.handleError(tokens[1], 'binary operation')
         }
     }
 
@@ -154,9 +179,7 @@ export class Parser {
 
     private handleError(token: Token, location: string): never {
         const context = this.errorContext(token)
-        throw new Error(
-            context + `Unexpected token in ${location}: found ${this.currentToken.type}`,
-        )
+        throw new Error(context + `Unexpected token in ${location}: found ${token.type}`)
     }
 
     private errorContext(token: Token): string {
