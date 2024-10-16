@@ -107,9 +107,11 @@ export class Parser {
         const parseOnePrecedenceLevel = (
             precedenceLevel: number,
         ): BinaryOperationNode | null | never => {
-            let currentTokenIndex = tokens.length - 1
+            let currentTokenIndex = tokens.length - 2 // The last token is a term
 
-            while (currentTokenIndex >= 0) {
+            while (currentTokenIndex >= 1) {
+                // The first token is a term
+
                 const currentToken = tokens[currentTokenIndex]
 
                 if (

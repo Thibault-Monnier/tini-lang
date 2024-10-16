@@ -488,6 +488,22 @@ export const testCases: TestCase[] = [
         expectedError: 'Unexpected token',
     },
     {
+        description: 'Syntax error due to missing term',
+        input: `
+      a = 5 +
+    `,
+        expectedAST: null,
+        expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Syntax error due to non-unary operator at the beginning of the expression',
+        input: `
+      a = /5
+    `,
+        expectedAST: null,
+        expectedError: 'Unexpected token',
+    },
+    {
         description: 'Print statement with no expression',
         input: `
       print
