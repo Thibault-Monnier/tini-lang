@@ -104,54 +104,35 @@ export class Parser {
     }
 
     private parseBinaryOperation(tokens: Array<Token>): BinaryOperationNode | TermNode | never {
-        let currentTokenIndex = tokens.length - 1
+        const parseOnePrecedenceLevel = (
+            precedenceLevel: number,
+        ): BinaryOperationNode | null | never => {
+            let currentTokenIndex = tokens.length - 1
 
-        while (currentTokenIndex >= 0) {
-            const currentToken = tokens[currentTokenIndex]
-            if (
-                currentToken.type !== '+' &&
-                currentToken.type !== '-' &&
-                currentToken.type !== '*' &&
-                currentToken.type !== '/'
-            ) {
-                currentTokenIndex--
-                continue
-            } else {
-                if (LevelOfPrecedence[currentToken.type] === 1) {
-                    const operator: BinaryOperator = currentToken.type
+            while (currentTokenIndex >= 0) {
+                const currentToken = tokens[currentTokenIndex]
+
+                if (
+                    ['+', '-', '*', '/'].includes(currentToken.type) &&
+                    LevelOfPrecedence[currentToken.type as BinaryOperator] === precedenceLevel
+                ) {
+                    const operator: BinaryOperator = currentToken.type as BinaryOperator
                     const left = this.parseBinaryOperation(tokens.slice(0, currentTokenIndex))
                     const right = this.parseBinaryOperation(tokens.slice(currentTokenIndex + 1))
                     return { type: 'BinaryOperation', left, operator, right }
-                } else {
-                    currentTokenIndex--
-                    continue
                 }
+
+                currentTokenIndex--
             }
+
+            return null
         }
 
-        // There is no LevelOfPrecedence 1 operator in the expression
-        currentTokenIndex = tokens.length - 1
-
-        while (currentTokenIndex >= 0) {
-            const currentToken = tokens[currentTokenIndex]
-            if (
-                currentToken.type !== '+' &&
-                currentToken.type !== '-' &&
-                currentToken.type !== '*' &&
-                currentToken.type !== '/'
-            ) {
-                currentTokenIndex--
-                continue
-            } else {
-                if (LevelOfPrecedence[currentToken.type] === 2) {
-                    const operator: BinaryOperator = currentToken.type
-                    const left = this.parseBinaryOperation(tokens.slice(0, currentTokenIndex))
-                    const right = this.parseBinaryOperation(tokens.slice(currentTokenIndex + 1))
-                    return { type: 'BinaryOperation', left, operator, right }
-                } else {
-                    currentTokenIndex--
-                    continue
-                }
+        // Try to parse binary operations with higher precedence levels first
+        for (let precedenceLevel = 1; precedenceLevel <= 2; precedenceLevel++) {
+            const result = parseOnePrecedenceLevel(precedenceLevel)
+            if (result) {
+                return result
             }
         }
 
@@ -159,7 +140,6 @@ export class Parser {
         if (tokens.length === 1) {
             return this.parseTerm(tokens[0])
         } else {
-            console.log(tokens[1])
             this.handleError(tokens[1], 'binary operation')
         }
     }
