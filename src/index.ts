@@ -16,6 +16,7 @@ if (!filePath) {
 
 const fullPath = path.join('scripts', filePath)
 const isDebug = process.argv.includes('--debug')
+const isPerfLogging = process.argv.includes('--perf')
 
 fs.readFile(fullPath, 'utf8', (err, data) => {
     if (err) {
@@ -30,9 +31,9 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
     }
 
     try {
-        const startTime = Date.now()
-
+        const parserStartTime = Date.now()
         const ast = new Parser(new Lexer(data)).parseProgram()
+        const parserEndTime = Date.now()
 
         if (isDebug) {
             console.log(
@@ -47,10 +48,22 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
             )
         }
 
+        const interpreterStartTime = Date.now()
         new Interpreter(ast).interpret()
+        const interpreterEndTime = Date.now()
 
-        const endTime = Date.now()
-        console.log(chalk.greenBright.bold(`Execution time: ${endTime - startTime}ms`))
+        if (isPerfLogging) {
+            console.log(
+                chalk.greenBright.bold('Parser execution time:'),
+                parserEndTime - parserStartTime,
+                'ms',
+            )
+            console.log(
+                chalk.greenBright.bold('Interpreter execution time:'),
+                interpreterEndTime - interpreterStartTime,
+                'ms',
+            )
+        }
     } catch (e) {
         console.error((e as Error).message)
         process.exit(1)

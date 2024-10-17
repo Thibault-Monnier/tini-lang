@@ -35,13 +35,13 @@ This project contains a lexer, parser, and interpreter for a simple language cal
 
 > This project uses `ts-node`, so you won't need to compile anything to run your scripts.
 
-Place any personal program that you want to execute in the `scripts` folder. Then, run `npm run start -- [rel-filepath]` which will execute the file **relative to the `scripts` folder**. You can also use `npm run watch -- [rel-filepath]` to enable hot-reloading.
+Place any personal program that you want to execute in the `scripts` folder. Then, run `npm run start [rel-filepath] -- [params]` which will execute the file **relative to the `scripts` folder**. You can pass the `--debug` and `--perf` parameters.
 
-> Note that the `scripts` folder is ignored by Git.
+> Note that the `scripts` folder is ignored by source control.
 
 ### Runing test
 
-You can run all tests with `npm run test`, or a specific file with `npm run test -- [filepath]`
+You can run all tests with `npm run test`, or a specific file with `npm run test [filepath]`
 
 ---
 
@@ -131,13 +131,13 @@ Below is the formal LALR grammar for `tini-lang`. Note that it will regularly ch
 Here is an example program written in the simple programming language:
 
 ```
-a = 0 - 1
-b = 1 + 2 - a
+a = -1 * 2 + 4
+b = 1 + 2 / a
 print b + 3
 ```
 
 **Expected Output:**
 
 ```
-7
+5
 ```
