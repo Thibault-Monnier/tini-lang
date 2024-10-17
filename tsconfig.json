@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-        "target": "ES2023",
+        "target": "ESNext",
         "module": "CommonJS",
-        "strict": true,
+        "moduleResolution": "node",
         "esModuleInterop": true,
+        "strict": true,
         "forceConsistentCasingInFileNames": true,
         "outDir": "./lib",
-        "moduleResolution": "node",
         "sourceMap": true
     },
     "include": ["src/**/*.ts"],
