@@ -15,6 +15,7 @@ if (!filePath) {
 }
 
 const fullPath = path.join('scripts', filePath)
+const isDebug = process.argv.includes('--debug')
 
 fs.readFile(fullPath, 'utf8', (err, data) => {
     if (err) {
@@ -22,24 +23,34 @@ fs.readFile(fullPath, 'utf8', (err, data) => {
         process.exit(1)
     }
 
-    console.warn('Program content:')
-    console.log(data)
-    printSeparator()
+    if (isDebug) {
+        console.warn('Program content:')
+        console.log(data)
+        printSeparator()
+    }
 
     try {
+        const startTime = Date.now()
+
         const ast = new Parser(new Lexer(data)).parseProgram()
-        console.log(
-            chalk.blueBright.bold(
-                'AST:',
-                util.inspect(ast, {
-                    showHidden: false,
-                    depth: null,
-                    colors: true,
-                }),
-            ),
-        )
+
+        if (isDebug) {
+            console.log(
+                chalk.blueBright.bold(
+                    'AST:',
+                    util.inspect(ast, {
+                        showHidden: false,
+                        depth: null,
+                        colors: true,
+                    }),
+                ),
+            )
+        }
 
         new Interpreter(ast).interpret()
+
+        const endTime = Date.now()
+        console.log(chalk.greenBright.bold(`Execution time: ${endTime - startTime}ms`))
     } catch (e) {
         console.error((e as Error).message)
         process.exit(1)
