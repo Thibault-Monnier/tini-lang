@@ -45,6 +45,9 @@ export class Interpreter {
                     case '*':
                         return left * right
                     case '/':
+                        if (right === 0) {
+                            throw new Error('Attempted to divide by zero')
+                        }
                         return left / right
                 }
             case 'Identifier':

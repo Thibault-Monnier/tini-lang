@@ -60,6 +60,14 @@ const testCases: TestCase[] = [
         expectedOutput: '3',
     },
     {
+        description: 'Complex expression with mixed operators',
+        input: `
+          a = 2 + 3 * 2 - 4 / 2
+          print a
+        `,
+        expectedOutput: '6',
+    },
+    {
         description: 'Variables in expressions',
         input: `
       num = 5
@@ -67,6 +75,27 @@ const testCases: TestCase[] = [
       print total
     `,
         expectedOutput: '15',
+    },
+    {
+        description: 'Many variables and long expressions',
+        input: `
+
+          a = 5 + 5 - 2 - 6 / 2
+          b = 10 * 2 - 5 * 2
+          
+          
+
+            c = -a + b + 2 * a
+
+    d = a * b
+
+
+             print c + d + a + b + 1 * 2 - 3 / 1 + 5 - 4 * 7 + 20 / 2 + 1
+            
+
+    
+        `,
+        expectedOutput: '67',
     },
     {
         description: 'Undefined variable error',
@@ -82,6 +111,22 @@ const testCases: TestCase[] = [
       b = a 5
     `,
         expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Syntax error due to missing operand',
+        input: `
+        a = 5
+        b = a +
+        `,
+        expectedError: 'Unexpected token',
+    },
+    {
+        description: 'Division by zero',
+        input: `
+          a = 10 / 0
+          print a
+        `,
+        expectedError: 'Attempted to divide by zero',
     },
 ]
 
